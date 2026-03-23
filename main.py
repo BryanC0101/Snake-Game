@@ -1,3 +1,5 @@
+# Projeto feito para entender o básico do Tkinter
+
 import tkinter
 import random
 
@@ -38,6 +40,7 @@ window.geometry(f"{window_width}x{window_height}+{window_x}+{window_y}")
 # Iniciar o jogo
 snake = Tile(5*TILE_SIZE, 5*TILE_SIZE) # Célula inicial da cobra
 food = Tile(10*TILE_SIZE, 10*TILE_SIZE) # Célula inicial da comida
+snake_body = [] 
 velocity_x = 0
 velocity_y = 0
 
@@ -45,16 +48,17 @@ def change_direction(event):
     # print(event.keysym) #  Mostra as teclas que pressiono
     global velocity_x, velocity_y
 
-    if (event.keysym == "Up"):
+# Aqui cria o movimento, e após o 'and' faz não permitir que ela volte para trás
+    if (event.keysym == "Up" and velocity_y != 1):
         velocity_x = 0
         velocity_y = -1
-    elif (event.keysym == "Down"):
+    elif (event.keysym == "Down" and velocity_y != -1):
         velocity_x = 0
         velocity_y = 1
-    elif (event.keysym == "Left"):
+    elif (event.keysym == "Left" and velocity_x != 1):
         velocity_x = -1
         velocity_y = 0
-    elif (event.keysym == "Right"):
+    elif (event.keysym == "Right" and velocity_x != -1):
         velocity_x = 1
         velocity_y = 0
 
@@ -62,6 +66,12 @@ def change_direction(event):
 # Função para mover a cobra
 def move():
     global snake
+
+    # Colisão
+    if (snake.x == food.x and snake.y == food.y):
+        snake_body.append(Tile(food.x, food.y))
+        food.x = random.randint(0, COLS-1) * TILE_SIZE
+        food.y = random.randint(0, ROWS-1) * TILE_SIZE
 
     snake.x += velocity_x * TILE_SIZE
     snake.y += velocity_y * TILE_SIZE
@@ -73,11 +83,14 @@ def draw():
 
     canvas.delete("all")
 
-    # Desenhando a cobra
-    canvas.create_rectangle(snake.x, snake.y, snake.x + TILE_SIZE, snake.y + TILE_SIZE, fill="lime green")
-
     # Desenhando a comida
     canvas.create_rectangle(food.x, food.y, food.x + TILE_SIZE, food.y + TILE_SIZE, fill="red")
+
+    # Desenhando a cobra
+    canvas.create_rectangle(snake.x, snake.y, snake.x + TILE_SIZE, snake.y + TILE_SIZE, fill="lime green")
+    
+    for tile in snake_body:
+        canvas.create_rectangle(tile.x, tile.y, tile.x + TILE_SIZE, tile.y + TILE_SIZE, fill = "lime green")
     
     window.after(100, draw) # Chama a função draw a cada 100ms
 
