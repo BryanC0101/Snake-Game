@@ -14,7 +14,7 @@ window.title("Snake")
 window.resizable(False, False)
 
 # Aqui é onde o jogo será desenhado
-canvas = tkinter.Canvas(window, bg = "black", width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
+canvas = tkinter.Canvas(window, bg = "black", width=WINDOW_WIDTH, height=WINDOW_HEIGHT, borderwidth=0, highlightthickness=0)
 canvas.pack()
 window.update()
 
