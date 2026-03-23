@@ -73,6 +73,17 @@ def move():
         food.x = random.randint(0, COLS-1) * TILE_SIZE
         food.y = random.randint(0, ROWS-1) * TILE_SIZE
 
+    # Atualizando o corpo da cobra
+    for i in range(len(snake_body)-1, -1, -1):
+        tile = snake_body[i]
+        if (i == 0):
+            tile.x = snake.x
+            tile.y = snake.y
+        else:
+            prev_tile = snake_body[i-1]
+            tile.x = prev_tile.x
+            tile.y = prev_tile.y
+
     snake.x += velocity_x * TILE_SIZE
     snake.y += velocity_y * TILE_SIZE
 
